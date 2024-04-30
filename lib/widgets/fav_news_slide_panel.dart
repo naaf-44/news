@@ -38,7 +38,6 @@ class _FavNewsSlidePanelState extends State<FavNewsSlidePanel> {
         InkWell(
           onTap: () async {
             widget.favNewsBlocContext!.read<FavNewsBloc>().add(DeleteNewsEvent(widget.favNewsDao, widget.viewNewsModelList[widget.index].newsKey.toString()));
-            widget.favNewsBlocContext!.read<FavNewsBloc>().add(GetFavNewsEvent(widget.favNewsDao));
             slideController.dismiss();
           },
           child: Container(

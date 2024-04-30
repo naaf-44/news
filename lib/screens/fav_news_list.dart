@@ -21,6 +21,9 @@ class _FavNewsListState extends State<FavNewsList> {
         create: (context) => FavNewsBloc()..add(GetFavNewsEvent(favNewsDao)),
         child: BlocConsumer<FavNewsBloc, FavNewsState>(
           listener: (context, state) {},
+          buildWhen: (previous, current) {
+            return previous != current && current.favNewsStatus == FavNewsStatus.loaded;
+          },
           builder: (context, state) {
             favNewsBlocContext = context;
             if (state.favNewsStatus == FavNewsStatus.loading) {

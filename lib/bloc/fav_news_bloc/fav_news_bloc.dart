@@ -51,6 +51,32 @@ class FavNewsBloc extends Bloc<FavNewsEvent, FavNewsState> {
 
     on<DeleteNewsEvent>((event, emit) async {
       int res = await event.favNewsDao.deleteFavNews(event.newsKey);
+      final resultList = await event.favNewsDao.getFavNews();
+      List<FavNewsModel> favNewsModelList = [];
+      List<ViewNewsModel> viewNewsModelList = [];
+
+      for (final rows in resultList) {
+        favNewsModelList.add(FavNewsModel(
+          favNewsId: rows[FavNewsDao.favNewsId].toString(),
+          favNewsKey: rows[FavNewsDao.favNewsKey],
+          favNewsTitle: rows[FavNewsDao.favNewsTitle],
+          favNewsDesc: rows[FavNewsDao.favNewsDesc],
+          favNewsContent: rows[FavNewsDao.favNewsContent],
+          favNewsPublishedAt: rows[FavNewsDao.favNewsPublishedAt],
+          favNewsImageUrl: rows[FavNewsDao.favNewsImageUrl],
+        ));
+        viewNewsModelList.add(ViewNewsModel(
+          newsId: rows[FavNewsDao.favNewsId].toString(),
+          newsKey: rows[FavNewsDao.favNewsKey],
+          newsTitle: rows[FavNewsDao.favNewsTitle],
+          newsDesc: rows[FavNewsDao.favNewsDesc],
+          newsContent: rows[FavNewsDao.favNewsContent],
+          newsPublishedAt: rows[FavNewsDao.favNewsPublishedAt],
+          newsImageUrl: rows[FavNewsDao.favNewsImageUrl],
+          isFavorite: true,
+        ));
+      }
+      emit(state.copyWith(favNewsStatus: FavNewsStatus.loaded, favNewsModelList: favNewsModelList, viewNewsModelList: viewNewsModelList));
       print("RES: $res");
     });
   }
